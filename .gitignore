@@ -1,0 +1,17 @@
+venv/
+*.csv
+.env
+**/__pycache__/
+migrations/
+.pytest_cache/
+.idea/
+build/
+dist/
+.spec
+*.db
+*.xlsx
+20-11-2024/
+*.spec
+instance/
+alembic/
+alembic.ini
