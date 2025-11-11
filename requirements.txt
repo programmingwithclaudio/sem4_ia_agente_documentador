@@ -1,12 +1,46 @@
-fastapi==0.115.5
-uvicorn==0.32.1
-SQLAlchemy==2.0.36
-pydantic==2.10.1
-python-jose==3.3.0
-passlib==1.7.4
-bcrypt==4.2.1
-python-multipart==0.0.17
-typer==0.13.1
-alembic==1.14.0
-pydantic-settings==2.6.1
-fastapi-lifespan-manager==0.1.4
+# Core FastAPI
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.7
+# FastAPI Users - Sistema de autenticación completo
+fastapi-users[sqlalchemy,oauth]==12.1.3
+
+# Base de datos
+sqlalchemy==2.0.25
+alembic==1.13.1
+asyncpg==0.29.0  # PostgreSQL async
+psycopg2-binary==2.9.9  # PostgreSQL sync
+
+# Seguridad y tokens
+python-jose[cryptography]==3.3.0
+pwdlib[argon2]==0.2.0  # Reemplaza passlib
+bcrypt==5.0.0
+
+# Email
+fastapi-mail==1.4.1
+jinja2==3.1.3
+
+# Rate limiting
+slowapi==0.1.9
+
+# Redis para sesiones y cache
+redis==5.0.1
+hiredis==2.3.2
+
+# Validación
+pydantic[email]==2.5.3
+pydantic-settings==2.1.0
+
+# CORS y middleware
+python-dotenv==1.0.0
+
+# Monitoring y logging
+loguru==0.7.2
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0
+
+# Utilidades
+python-dateutil==2.8.2
