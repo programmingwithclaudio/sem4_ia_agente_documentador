@@ -1,4 +1,4 @@
-#  app\models.py
+#!/usr/bin/env python3
 from datetime import datetime
 from typing import AsyncGenerator
 from fastapi import Depends
@@ -13,7 +13,6 @@ from app.config import settings
 class Base(DeclarativeBase):
     pass
 
-
 # Tabla de asociación muchos a muchos (users <-> roles)
 user_roles = Table(
     'user_roles',
@@ -21,7 +20,6 @@ user_roles = Table(
     Column('user_id', Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True),
     Column('role_id', Integer, ForeignKey('roles.id', ondelete='CASCADE'), primary_key=True)
 )
-
 
 class Role(Base):
     """Modelo de roles"""
@@ -55,28 +53,22 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     # - is_superuser (bool)
     # - is_verified (bool)
        
-    # IMPORTANTE: Definir explícitamente el id como primary key
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    
-    # Campos personalizados adicionales
+    # Campos personalizados
     username: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     first_name: Mapped[str] = mapped_column(String(100), nullable=True)
     last_name: Mapped[str] = mapped_column(String(100), nullable=True)
     phone: Mapped[str] = mapped_column(String(20), nullable=True)
-    
     # Avatar/Profile
     avatar_url: Mapped[str] = mapped_column(String(500), nullable=True)
     bio: Mapped[str] = mapped_column(Text, nullable=True)
-    
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    
-    # Seguridad adicional
+    # Seguridad
     failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0)
     locked_until: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    
     # OAuth providers
     oauth_provider: Mapped[str] = mapped_column(String(50), nullable=True)
     oauth_id: Mapped[str] = mapped_column(String(255), nullable=True)
@@ -134,14 +126,11 @@ class UserSession(Base):
         return f"<Session {self.id} - User {self.user_id}>"
 
 
-# =============================================
 # Database Engine y SessionMaker
-# =============================================
-
 # Async engine para FastAPI Users
 engine = create_async_engine(
     settings.database_url,
-    echo=False,  # True para debug SQL
+    echo=False,
     pool_pre_ping=True,
     pool_size=10,
     max_overflow=20

@@ -1,4 +1,4 @@
-# app\auth.py
+#!/usr/bin/env python3
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import (
     AuthenticationBackend,
@@ -8,12 +8,11 @@ from fastapi_users.authentication import (
 from app.models import User
 from app.users_manager import get_user_manager
 from app.config import settings
-
+# Dependency para verificar roles
+from fastapi import Depends, HTTPException, status
 
 # Bearer Transport (headers + cookies)
 bearer_transport = BearerTransport(tokenUrl="/api/auth/login")
-
-
 
 # JWT Strategy
 def get_jwt_strategy() -> JWTStrategy:
@@ -23,7 +22,6 @@ def get_jwt_strategy() -> JWTStrategy:
         algorithm=settings.jwt_algorithm,
     )
 
-
 # Authentication Backend
 auth_backend = AuthenticationBackend(
     name="jwt",
@@ -31,24 +29,16 @@ auth_backend = AuthenticationBackend(
     get_strategy=get_jwt_strategy,
 )
 
-
-
 # FastAPI Users Instance
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend],
 )
 
-
-
 # Dependencies de autenticación
 current_active_user = fastapi_users.current_user(active=True)
 current_verified_user = fastapi_users.current_user(active=True, verified=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)
-
-
-# Dependency para verificar roles
-from fastapi import Depends, HTTPException, status
 
 
 async def require_role(required_role: str):

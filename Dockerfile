@@ -7,10 +7,11 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema (incluye curl para healthcheck)
 RUN apt-get update && apt-get install -y \
     postgresql-client \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Directorio de trabajo
@@ -34,9 +35,9 @@ USER appuser
 # Exponer puerto
 EXPOSE 8000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/api/health/ping')"
+# Health check (usando curl en lugar de requests)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/api/health/ping || exit 1
 
 # Comando de inicio
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

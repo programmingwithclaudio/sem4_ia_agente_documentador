@@ -1,64 +1,78 @@
+# **Despliegue del Proyecto: Sistema de Authenticación en Fastapi**
 
+---
+### **1 Deploy local (windows 10)**
+#### **1.1 Requisitos del Sistema**
 
-#### Proceso Deploy Proyecto
-
-```bash
-alembic init alembic
-
-# sqlalchemy.url = driver://user:pass@localhost/dbname
-sqlalchemy.url = postgresql+asyncpg://postgres:mermaiddev@localhost:5432/auth_db
-# api-fastapi-login-example/alembic/env.py
-
-
-alembic revision --autogenerate -m "Initial migration"
-
-alembic upgrade head
-```
-$env:Path = "C:\Program Files (x86)\GnuWin32\bin;" + $env:Path
-Get-Command tree
-tree -I "venv|alembic|__pycache__|.git" -L 3
+| Componente            | Versión recomendada   | Notas                    |
+| --------------------- | --------------------- | ------------------------ |
+| **Sistema Operativo** | Windows 10 / Debian   | Entornos compatibles     |
+| **Python**            | 3.12.10               | Requerido                |
+| **PostgreSQL**        | 17.6                  | Base de datos principal  |
+| **Redis CLI**         | 5.0.14.1              | Módulo de caché opcional |
+| **Docker**            | 29.0.0, build 3d4129b | Opcional                 |
+| **Docker Compose**    | v2.40.3               | Opcional                 |
 
 ---
 
-```bash
-alembic init alembic
-
-# sqlalchemy.url = driver://user:pass@localhost/dbname
-sqlalchemy.url = sqlite:///./app.db
-# api-fastapi-login-example/alembic/env.py
-from app.models import Base, engine
-target_metadata=Base.metadata
-
-alembic revision --autogenerate -m "Initial migration"
-
-alembic upgrade head
-```
+#### **1.2 Clonación y Configuración del Entorno**
 
 ```bash
-pip install -r requirements.txt --upgrade --no-cache-dir
+# Crear entorno virtual
+python -m venv venv
 
+# Activar entorno
+.\venv\Scripts\activate   # Windows
+# source venv/bin/activate  # Linux/Debian
+
+# Instalar dependencias
+pip install -r requirements.txt
 ```
+
+---
+
+#### **1.3 Configuración de la Base de Datos**
+
+Ejecutar en **psql** o cualquier cliente SQL compatible:
+
+```sql
+CREATE DATABASE auth_db;
+```
+
+Verificar detalles de conexión mediante variables de entorno en el archivo `.env.local`.
+
+---
+
+#### **1.4 Ejecución del Proyecto (modo local)**
 
 ```bash
-python run.py
-http://localhost:8000/docs
+uvicorn app.main:app --reload
 ```
 
+Acceso a la documentación interactiva:
+
+> **Ruta:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+### **2 Deploy mediante Docker (Kernel-Linux 5.15) (modo contenedor)**
+
+#### 2.1 renombrar el  `.env.docker` por `.env`
+#### 2.2 Ejecución mediante Docker (modo contenedor)
 ```bash
-api-fastapi-login-example/
-├── app/
-│   ├── __init__.py
-│   ├── auth.py
-│   ├── config.py
-│   ├── models.py
-│   └── users.py
-├── alembic/
-│   ├── env.py
-│   ├── README
-│   ├── script.py.mako
-│   └── versions/
-├── alembic.ini
-├── migrations.py
-├── requirements.txt
-└── run.py
+# Construcción de imágenes
+docker compose build
+
+# Ejecución estándar
+docker compose up -d
+
+# Ejecución con perfil de desarrollo
+docker compose --profile dev up -d
 ```
+
+---
+
+
+Validar acceso en:
+
+> **Ruta: [http://localhost:8000/docs](http://localhost:8000/docs)**

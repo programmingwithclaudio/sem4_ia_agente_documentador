@@ -1,4 +1,4 @@
-# app/main.py
+#!/usr/bin/env python3
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,16 +18,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-# ==========================================
 # Rate Limiter
-# ==========================================
 limiter = Limiter(key_func=get_remote_address)
 
-
-# ==========================================
 # Lifespan - Inicialización y cierre
-# ==========================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -78,9 +72,7 @@ async def initialize_roles(session: AsyncSession):
     await session.commit()
 
 
-# ==========================================
-# Crear aplicación FastAPI
-# ==========================================
+# FastAPI
 app = FastAPI(
     title="🔐 Auth Microservice",
     description="Sistema de autenticación centralizado con FastAPI Users",
@@ -95,9 +87,7 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
-# ==========================================
 # CORS Middleware
-# ==========================================
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.origins_list,
@@ -107,9 +97,7 @@ app.add_middleware(
 )
 
 
-# ==========================================
-# Exception handlers globales
-# ==========================================
+# Exception handlers 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Handler global de excepciones"""
@@ -119,11 +107,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal server error"}
     )
 
-
-# ==========================================
 # Incluir routers de FastAPI Users
-# ==========================================
-
 # Router de autenticación (login, logout)
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -160,10 +144,7 @@ app.include_router(
 )
 
 
-# ==========================================
 # Incluir routers personalizados
-# ==========================================
-
 # Router de usuarios (endpoints para usuarios autenticados)
 app.include_router(
     users_router, 
@@ -192,10 +173,7 @@ app.include_router(
     tags=["health"]
 )
 
-
-# ==========================================
 # Root endpoint
-# ==========================================
 @app.get("/", tags=["root"])
 async def root():
     """Endpoint raíz"""
@@ -203,6 +181,5 @@ async def root():
         "service": "Auth Microservice",
         "version": "2.0.0",
         "status": "running",
-        "docs": "/docs",
-        "redoc": "/redoc"
+        "docs": "/docs"
     }

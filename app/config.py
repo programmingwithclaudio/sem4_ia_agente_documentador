@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
@@ -14,12 +15,12 @@ class Settings(BaseSettings):
 
     # Security - JWT
     secret_key: str = "change-this-super-secret-key"
-    jwt_algorithm: str = "HS256"  # ✅ CORRECTO: Para firmar JWTs
+    jwt_algorithm: str = "HS256" 
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
     
     # Security - Password Hashing
-    password_hash_schemes: List[str] = ["argon2", "bcrypt"]  # ✅ Para passwords
+    password_hash_schemes: List[str] = ["argon2", "bcrypt"]
     
     # Email
     mail_username: str = ""

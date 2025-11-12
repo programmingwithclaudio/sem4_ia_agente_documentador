@@ -1,4 +1,4 @@
-# app\users_manager.py
+#!/usr/bin/env python3
 from datetime import datetime
 from typing import Optional, Union
 from fastapi import Depends, Request, Response
@@ -101,7 +101,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         self,
         user: User,
         request: Optional[Request] = None,
-        response: Optional[Response] = None,  # ← NUEVO parámetro
+        response: Optional[Response] = None,
     ):
         """Se ejecuta después del login"""
         print(f"🔓 Login exitoso: {user.email}")

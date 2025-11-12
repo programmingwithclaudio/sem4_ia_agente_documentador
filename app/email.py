@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from app.config import settings
-
 
 # Configuración de FastAPI Mail
 conf = ConnectionConfig(

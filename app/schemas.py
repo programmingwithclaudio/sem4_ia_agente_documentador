@@ -1,12 +1,10 @@
+#!/usr/bin/env python3
 from datetime import datetime
 from typing import Optional, List
 from fastapi_users import schemas
-from pydantic import BaseModel, EmailStr, field_validator
-
-
+from pydantic import BaseModel, field_validator #EmailStr
 
 # Schemas de FastAPI Users (extendidos)
-
 class UserRead(schemas.BaseUser[int]):
     """Schema para leer usuarios"""
     username: str
@@ -19,7 +17,7 @@ class UserRead(schemas.BaseUser[int]):
     last_login: Optional[datetime] = None
     roles: List[str] = []
     
-    # 🔧 VALIDADOR PARA CONVERTIR ROLES A STRINGS
+    # VALIDADOR PARA CONVERTIR ROLES A STRINGS
     @field_validator('roles', mode='before')
     @classmethod
     def convert_roles_to_strings(cls, v):
