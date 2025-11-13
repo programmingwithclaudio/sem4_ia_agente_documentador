@@ -16,3 +16,4 @@ instance/
 alembic/
 alembic.ini
 .env.example
+venv_ia/

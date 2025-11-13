@@ -1,64 +1,12 @@
-# **Despliegue del Proyecto: Sistema de Authenticación en Fastapi**
+# **Asistente Inteligente de Documentación para  `system api`**
 
----
-### **1 Deploy local (windows 10)**
-#### **1.1 Requisitos del Sistema**
+- Objetivo: asistir en infromación sobre detalles ténicos de la demo y generar una documentación `README.md`.
+- Usos en frameworks de python
+- (Opcional) Clonar el proyecto y directamente saltar a `Deploy Agente local`.
 
-| Componente            | Versión recomendada   | Notas                    |
-| --------------------- | --------------------- | ------------------------ |
-| **Sistema Operativo** | Windows 10 / Debian   | Entornos compatibles     |
-| **Python**            | 3.12.10               | Requerido                |
-| **PostgreSQL**        | 17.6                  | Base de datos principal  |
-| **Redis CLI**         | 5.0.14.1              | Módulo de caché opcional |
-| **Docker**            | 29.0.0, build 3d4129b | Opcional                 |
-| **Docker Compose**    | v2.40.3               | Opcional                 |
-
----
-
-#### **1.2 Clonación y Configuración del Entorno**
-
-```bash
-# Crear entorno virtual
-python -m venv venv
-
-# Activar entorno
-.\venv\Scripts\activate   # Windows
-# source venv/bin/activate  # Linux/Debian
-
-# Instalar dependencias
-pip install -r requirements.txt
-```
-
----
-
-#### **1.3 Configuración de la Base de Datos**
-
-Ejecutar en **psql** o cualquier cliente SQL compatible:
-
-```sql
-CREATE DATABASE auth_db;
-```
-
-Verificar detalles de conexión mediante variables de entorno en el archivo `.env.local`.
-
----
-
-#### **1.4 Ejecución del Proyecto (modo local)**
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Acceso a la documentación interactiva:
-
-> **Ruta:** [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-### **2 Deploy mediante Docker (Kernel-Linux 5.15) (modo contenedor)**
-
-#### 2.1 renombrar el  `.env.docker` por `.env`
-#### 2.2 Ejecución mediante Docker (modo contenedor)
+### **1 Deploy mediante Docker (Kernel-Linux 5.15) (modo contenedor)**
+#### 1.1 renombrar el  `.env.docker` por `.env`
+#### 1.2 Ejecución mediante Docker (modo contenedor)
 ```bash
 # Construcción de imágenes
 docker compose build
@@ -71,8 +19,30 @@ docker compose --profile dev up -d
 ```
 
 ---
-
-
 Validar acceso en:
 
 > **Ruta: [http://localhost:8000/docs](http://localhost:8000/docs)**
+
+### **2 Deploy Agente local**
+
+```bash
+# Crear entorno virtual
+python -m venv venv_ia
+
+# Activar entorno
+.\venv_ia\Scripts\activate   # Windows
+# source venv/bin/activate  # Linux/Debian
+
+# Instalar dependencias
+pip install -r requirements_ia.txt
+
+
+# organizar scripts a csv
+python -m ia.files_to_csv
+# convertir embeddings
+python -m ia.csv_to_embeddings
+# deploy agente inteligente
+python -m ia.agent
+
+```
+> **Ruta: [http://localhost:7865](http://localhost:7865)**
