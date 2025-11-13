@@ -2,7 +2,9 @@
 
 - Objetivo: asistir en infromación sobre detalles ténicos de la demo y generar una documentación `README.md`.
 - Usos en frameworks de python
+- (Directo) Configurar `venv_ia/` y Ejecutar directamente este comando `python -m ia.agent` en el directorio principal.
 - (Opcional) Clonar el proyecto y directamente saltar a `Deploy Agente local`.
+
 
 ### **1 Deploy mediante Docker (Kernel-Linux 5.15) (modo contenedor)**
 #### 1.1 renombrar el  `.env.docker` por `.env`

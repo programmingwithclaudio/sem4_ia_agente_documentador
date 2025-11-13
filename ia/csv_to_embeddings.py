@@ -40,7 +40,7 @@ class ConfigEmbeddingsV3:
 
 class GeneradorTextoBusquedaV3Fixed:
     """
-    ✅ VERSIÓN MEJORADA: Genera texto MÁS DESCRIPTIVO
+    Genera texto
     """
     
     def __init__(self):
@@ -61,7 +61,7 @@ class GeneradorTextoBusquedaV3Fixed:
     
     def _extraer_routers_desde_json(self, include_routers_str: str) -> List[str]:
         """
-        ✅ NUEVO: Extrae información de routers desde el JSON de include_routers
+        Extrae información de routers desde el JSON de include_routers
         """
         if not include_routers_str:
             return []
@@ -92,7 +92,7 @@ class GeneradorTextoBusquedaV3Fixed:
     
     def generar_para_route(self, row: pd.Series) -> str:
         """
-        ✅ MEJORADO: Texto MUCHO MÁS RICO para endpoints
+        Texto para endpoints
         """
         partes = []
         
@@ -142,7 +142,7 @@ class GeneradorTextoBusquedaV3Fixed:
         if tags:
             partes.append(f"tags {tags}")
         
-        # 6. ✅ NUEVO: INFORMACIÓN DE INCLUDE_ROUTERS (si es main.py)
+        # 6. INFORMACIÓN DE INCLUDE_ROUTERS (si es main.py)
         include_routers = self._get_safe(row, 'include_routers')
         if include_routers:
             routers_info = self._extraer_routers_desde_json(include_routers)
@@ -179,7 +179,7 @@ class GeneradorTextoBusquedaV3Fixed:
         if es_async in ['True', 'true', '1', True]:
             partes.append("asíncrono")
         
-        # 12. ✅ NUEVO: DECORADORES (si tiene)
+        # 12. DECORADORES (si tiene)
         decoradores = self._get_safe(row, 'decoradores')
         if decoradores and decoradores not in ['[]', '']:
             partes.append(f"decoradores {decoradores}")
@@ -245,7 +245,7 @@ class GeneradorTextoBusquedaV3Fixed:
     
     def generar(self, row: pd.Series) -> str:
         """
-        ✅ MEJORADO: Mejor detección de tipo
+        Mejor detección de tipos
         """
         tipo = self._get_safe(row, 'tipo')
         
@@ -277,7 +277,7 @@ class GeneradorEmbeddingsV3:
         self.logger = self._setup_logger()
         self.model = SentenceTransformer(ConfigEmbeddingsV3.MODEL_NAME)
         self.model.max_seq_length = 512
-        self.generador_texto = GeneradorTextoBusquedaV3Fixed()  # ✅ NUEVO
+        self.generador_texto = GeneradorTextoBusquedaV3Fixed()
         self.scaler = StandardScaler()
     
     def _setup_logger(self):
@@ -300,7 +300,7 @@ class GeneradorEmbeddingsV3:
             df = pd.read_csv(csv_path)
             self.logger.info(f"✅ CSV: {len(df)} registros, {len(df.columns)} columnas")
             
-            # ✅ ANÁLISIS DE CAMPOS
+      
             self.logger.info("\n📊 ANÁLISIS DE CAMPOS:")
             
             campos_importantes = [
@@ -337,7 +337,7 @@ class GeneradorEmbeddingsV3:
         self.logger.info(f"📏 Longitud - Avg: {longitudes.mean():.1f}, "
                         f"Min: {longitudes.min()}, Max: {longitudes.max()}")
         
-        # ✅ MOSTRAR EJEMPLOS MÁS LARGOS
+
         self.logger.info("\n📝 EJEMPLOS DE TEXTO GENERADO:")
         for idx in range(min(5, len(df))):
             self.logger.info(f"\n[{idx+1}] {df.iloc[idx]['tipo']} | {df.iloc[idx]['elemento']}")
@@ -441,7 +441,7 @@ class GeneradorEmbeddingsV3:
     
     def indexar_redis(self, df: pd.DataFrame):
         """
-        ✅ MEJORADO: Indexa TODOS los campos disponibles
+        Indexa TODOS los campos disponibles
         """
         self.logger.info("\n💾 Indexando en Redis...")
         
@@ -459,7 +459,7 @@ class GeneradorEmbeddingsV3:
             for idx, row in df.iterrows():
                 chunk_key = f"chunk:{idx}"
                 
-                # ✅ TODOS LOS CAMPOS DISPONIBLES
+                # CAMPOS DISPONIBLES
                 metadata = {
                     'id': str(idx),
                     'tipo': str(row.get('tipo', '')),
